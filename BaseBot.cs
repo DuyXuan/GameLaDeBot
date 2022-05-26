@@ -336,7 +336,7 @@ namespace bot
             {
                 data.PutUtfString("targetId", enemySpirit.id.ToString());
             }
-            else
+            else if(isFireSpirit)
             {
                 data.PutUtfString("targetId", enemyPlayer.highgestAttackEnemyHero().id.ToString());
             }

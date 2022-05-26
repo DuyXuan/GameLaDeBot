@@ -138,8 +138,8 @@ namespace bot
             GemSwapInfo matchSupportGem = listMatchGem
                .Where(gemMatch => gemMatch.type == GemType.YELLOW || gemMatch.type == GemType.GREEN)
                .FirstOrDefault();
-
-            if (supportHero.isAlive() && supportHero.isFullMana() )
+            
+            if (supportHero.isAlive() && supportHero.isFullMana() && supportHero.getHeroAttack() < 9)
             {
                 TaskSchedule(delaySwapGem, _ => SendCastSkill(supportHero));
                 return true;
@@ -163,9 +163,10 @@ namespace bot
                 {
                     TaskSchedule(delaySwapGem, _ => SendCastSkill(mainAttackHero));
                     return true;
-                }
-                else if (subAttackHero.isAlive() && subAttackHero.isFullMana()
-                && subAttackHero.getHeroAttack() > 8)
+                } 
+                else if (subAttackHero.isAlive() 
+                    && subAttackHero.isFullMana() 
+                    && subAttackHero.getHeroAttack() > 8)
                 {
                     TaskSchedule(delaySwapGem, _ => SendCastSkill(subAttackHero));
                     return true;
@@ -173,17 +174,36 @@ namespace bot
                 else if (mainAttackHero.isAlive()
                     && mainAttackHero.isFullMana()
                     && supportHero.getHeroMana(supportHero) <= 3
+                    && mainAttackHero.getHeroAttack() <7
                     && matchSupportGem != null)
                 {
                     return false;
                 }
-                else if (subAttackHero.isAlive() && subAttackHero.isFullMana() 
-                    && (supportHero.getHeroMana(supportHero) > 3
-                    || matchSupportGem == null))
+                else if (subAttackHero.isAlive() 
+                    && subAttackHero.isFullMana()
+                    && subAttackHero.getHeroAttack() <7
+                    && supportHero.getHeroMana(supportHero) <= 3
+                    && matchSupportGem != null)
+                {
+                    return false;
+                }
+                   else if (subAttackHero.isAlive() && subAttackHero.isFullMana())
                 {
                     TaskSchedule(delaySwapGem, _ => SendCastSkill(subAttackHero));
                     return true;
                 }
+                 else if(supportHero.isAlive() && supportHero.isFullMana())
+                {
+                     TaskSchedule(delaySwapGem, _ => SendCastSkill(supportHero));
+                    return true;
+                }
+                else if(mainAttackHero.isAlive() && mainAttackHero.isFullMana()
+                    && supportHero.getHeroMana(supportHero) > 3)
+                {
+                    TaskSchedule(delaySwapGem, _ => SendCastSkill(mainAttackHero));
+                    return true;
+                }
+               
             }
 
             
