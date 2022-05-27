@@ -38,6 +38,7 @@ namespace bot {
             {
                 if(hero.isAlive()) return hero;
             }
+            return null ;
         }
 
 
