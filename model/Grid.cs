@@ -108,6 +108,17 @@ namespace bot
             {
                 return bonusTurnSwap;
             }
+            List<GemSwapInfo> matchSubAttackGem = listMatchGem
+              .Where(gemMatch => gemMatch.type == GemType.RED || gemMatch.type == GemType.PURPLE).ToList();
+            int enemyLeft = enemyPlayer.heroes.Where(x => x.isAlive()).Count();
+            if(enemyLeft == 1 
+                && matchSubAttackGem != null
+                && matchSubAttackGem?.Count > 0
+                && subAttackHero.isAlive() 
+                && !subAttackHero.isFullMana())
+            {
+                   return EatGemByNumberOfGemMatch(matchSubAttackGem);
+            }
 
             List<GemSwapInfo> matchSupportGem = listMatchGem
                 .Where(gemMatch => gemMatch.type == GemType.YELLOW || gemMatch.type == GemType.GREEN).ToList();
@@ -118,8 +129,7 @@ namespace bot
             }
               List<GemSwapInfo> matchMainAttackGem = listMatchGem
                .Where(gemMatch => gemMatch.type == GemType.BLUE || gemMatch.type == GemType.BROWN).ToList();
-            List<GemSwapInfo> matchSubAttackGem = listMatchGem
-              .Where(gemMatch => gemMatch.type == GemType.RED || gemMatch.type == GemType.PURPLE).ToList();
+            
 
             if(mainAttackHero.isAlive()
                 && mainAttackHero.getHeroAttack() > 8 && matchMainAttackGem!= null
